@@ -27,18 +27,14 @@ else
   echo "$REPOSITORIES_JSON" | jq -c '.repositories[]' | while read -r repo; do
     echo "Creating repository:"
     echo "$repo" | jq .
-    
-    # curl -s -u admin:microcks -H "Content-Type: application/json" \
-    #   -X POST http://localhost:8080/api/jobs \
-    #   -d "$repo"
 
     response=$(curl -s -u admin:microcks -H "Content-Type: application/json" \
-        -X POST http://localhost:8080/api/jobs \
+        -X POST http://localhost:$PORT/api/jobs \
         -d "$repo")
 
     id=$(echo "$response" | jq -r '.id')
 
-    curl -s -u admin:microcks -X PUT "http://localhost:8080/api/jobs/${id}/start"
+    curl -s -u admin:microcks -X PUT "http://localhost:$PORT/api/jobs/${id}/start"
 
   done
   echo    
