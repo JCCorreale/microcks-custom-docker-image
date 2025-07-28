@@ -6,9 +6,6 @@ set -e
 
 MICROCKS_PID=$!
 
-echo "Raw REPOSITORIES_JSON:"
-echo $REPOSITORIES_JSON
-
 # Wait until Microcks is available
 until curl -s -u admin:microcks http://localhost:$PORT/api/services > /dev/null; do
   echo "Waiting for Microcks to start..."
@@ -22,6 +19,9 @@ if [[ -z "$REPOSITORIES_JSON" ]]; then
   echo "No repositories configured in REPOSITORIES_JSON environment variable."
 else
   echo "Importing repositories from REPOSITORIES_JSON..."
+
+  echo "Raw REPOSITORIES_JSON:"
+  echo "$REPOSITORIES_JSON"
   
   # Use jq to parse the JSON array and iterate
   echo "$REPOSITORIES_JSON" | jq -c '.repositories[]' | while read -r repo; do
