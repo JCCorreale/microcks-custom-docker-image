@@ -2,7 +2,7 @@
 set -e
 
 # Start Microcks in background
-/deployments/run-java.sh &
+/deployments/run-java.sh --server.port=$PORT &
 
 MICROCKS_PID=$!
 
@@ -10,8 +10,8 @@ echo "Raw REPOSITORIES_JSON:"
 echo $REPOSITORIES_JSON
 
 # Wait until Microcks is available
-echo "Waiting for Microcks to start..."
-until curl -s -u admin:microcks http://localhost:8080/api/services > /dev/null; do
+until curl -s -u admin:microcks http://localhost:$PORT/api/services > /dev/null; do
+  echo "Waiting for Microcks to start..."
   sleep 5
 done
 
